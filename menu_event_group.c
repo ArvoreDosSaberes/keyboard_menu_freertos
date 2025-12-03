@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include "oled.h"
-#include "log.h"
+#include "log_vt100.h"
 
 #include "menu_event_group.h"
 

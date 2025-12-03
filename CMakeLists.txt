@@ -16,7 +16,7 @@ target_link_libraries(keyboard_menu_freertos PUBLIC
     pico_stdlib
     keyboard
     rack_includes
-    log
+    log_vt100
     oled
 )
 

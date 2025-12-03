@@ -8,7 +8,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "log.h"
+#include "log_vt100.h"
 
 extern EventGroupHandle_t xMenuEventGroup;
 

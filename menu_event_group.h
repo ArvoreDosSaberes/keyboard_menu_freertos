@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 #include "oled.h"
-#include "log.h"
+#include "log_vt100.h"
 
 #ifdef __cplusplus
 extern "C" {

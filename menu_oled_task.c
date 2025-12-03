@@ -2,7 +2,7 @@
 #include "task.h"
 #include "event_groups.h"
 
-#include "log.h"
+#include "log_vt100.h"
 
 #include "keyboard_menu_parameters.h"
 #include "menu_event_group.h"
