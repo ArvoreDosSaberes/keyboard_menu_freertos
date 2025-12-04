@@ -9,6 +9,7 @@
 
 #include "rack_inteligente.h"
 #include "oled.h"
+#include "oled_freeRTOS.h"
 #include <hardware/gpio.h>
 
 extern EventGroupHandle_t xMenuEventGroup;
@@ -309,6 +310,12 @@ static void handle_name_menu_keys(EventBits_t uxBits, menu_state_t *state, int *
 static void menu_oled_render(int selected_index) {
     const char *items[] = {"Trocar senha", "Trocar nome"};
 
+    // Protege acesso ao OLED com semáforo para evitar contenção com outras tasks
+    if (takeOled() != pdPASS) {
+        LOG_WARN("[Menu OLED] Falha ao obter semáforo do OLED");
+        return;
+    }
+
     oled_clear();
     oled_set_text_line(0, "Menu", OLED_ALIGN_CENTER);
 
@@ -323,22 +330,37 @@ static void menu_oled_render(int selected_index) {
     }
 
     oled_render_text();
+    releaseOled();
 }
 
 static void menu_oled_render_edit(const char *title) {
+    // Protege acesso ao OLED com semáforo para evitar contenção com outras tasks
+    if (takeOled() != pdPASS) {
+        LOG_WARN("[Menu OLED] Falha ao obter semáforo do OLED");
+        return;
+    }
+
     oled_clear();
     oled_set_text_line(0, title, OLED_ALIGN_CENTER);
     oled_set_text_line(2, "Use teclas para", OLED_ALIGN_CENTER);
     oled_set_text_line(3, "editar. * cancela", OLED_ALIGN_CENTER);
     oled_set_text_line(4, "# confirma/entra", OLED_ALIGN_CENTER);
     oled_render_text();
+    releaseOled();
 }
 
 static void menu_oled_render_edit_value(const char *title, const char *value) {
+    // Protege acesso ao OLED com semáforo para evitar contenção com outras tasks
+    if (takeOled() != pdPASS) {
+        LOG_WARN("[Menu OLED] Falha ao obter semáforo do OLED");
+        return;
+    }
+
     oled_clear();
     oled_set_text_line(0, title, OLED_ALIGN_CENTER);
     oled_set_text_line(2, value, OLED_ALIGN_LEFT);
     oled_set_text_line(3, "D=limpa C=back", OLED_ALIGN_CENTER);
     oled_set_text_line(4, "*=cancela #/A=ok", OLED_ALIGN_CENTER);
     oled_render_text();
+    releaseOled();
 }
