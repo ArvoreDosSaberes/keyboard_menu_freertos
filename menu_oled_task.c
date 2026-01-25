@@ -27,6 +27,8 @@ static int name_edit_len = 0;
 static char password_edit_buffer[32];
 static int password_edit_len = 0;
 
+static volatile bool menuOledOpen = false;
+
 static void menu_oled_render(int selected_index);
 static void menu_oled_render_edit(const char *title);
 static void menu_oled_render_edit_value(const char *title, const char *value);
@@ -75,6 +77,7 @@ void vMenuOledTask(void *pvParameters) {
                 #ifdef MENU_LED_PIN
                 gpio_put(MENU_LED_PIN, 1);
                 #endif
+                menuOledOpen = true;
                 state = MENU_STATE_NAVIGATE;
                 menu_oled_render(selected_index);
             }
@@ -134,6 +137,7 @@ static void handle_password_menu_keys(EventBits_t uxBits, menu_state_t *state, i
         #ifdef MENU_LED_PIN
         gpio_put(MENU_LED_PIN, 0);
         #endif
+        menuOledOpen = false;
         menu_oled_render(*selected_index);
         return;
     }
@@ -220,6 +224,7 @@ static void handle_name_menu_keys(EventBits_t uxBits, menu_state_t *state, int *
         #ifdef MENU_LED_PIN
         gpio_put(MENU_LED_PIN, 0);
         #endif
+        menuOledOpen = false;
 
         menu_oled_render(*selected_index);
         return;
@@ -252,6 +257,7 @@ static void handle_name_menu_keys(EventBits_t uxBits, menu_state_t *state, int *
         #ifdef MENU_LED_PIN
         gpio_put(MENU_LED_PIN, 0);
         #endif
+        menuOledOpen = false;
 
         menu_oled_render(*selected_index);
         return;
@@ -363,4 +369,8 @@ static void menu_oled_render_edit_value(const char *title, const char *value) {
     oled_set_text_line(4, "*=cancela #/A=ok", OLED_ALIGN_CENTER);
     oled_render_text();
     releaseOled();
+}
+
+bool menuOledIsOpen(void) {
+    return menuOledOpen;
 }

@@ -13,6 +13,8 @@ extern "C" {
 
 void vMenuOledTask(void *pvParameters);
 
+bool menuOledIsOpen(void);
+
 #ifdef __cplusplus
 }
 #endif
